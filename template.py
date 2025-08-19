@@ -1,9 +1,6 @@
 import os
 from pathlib import Path
 
-# Define the project structure using a dictionary
-# The keys are folder names, and the values are a list of files to create inside that folder.
-# A nested dictionary can represent a nested folder.
 
 PROJECT_STRUCTURE = {
     'src': {
