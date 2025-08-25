@@ -133,7 +133,7 @@ if __name__ == '__main__':
     data_transformer = DataTransformation()
     
     
-    file_path = r"C:\Users\uers\Documents\model_building_excercises\hotel booking customers\data\hotel_booking.csv"
+    file_path = "../../data/hotel_booking.csv"
     
     transformed_array, preprocessor_path = data_transformer.initiate_data_transformation(file_path)
     
