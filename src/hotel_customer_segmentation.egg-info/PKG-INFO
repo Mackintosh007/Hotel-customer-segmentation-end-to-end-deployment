@@ -1,0 +1,21 @@
+Metadata-Version: 2.4
+Name: hotel-customer-segmentation
+Version: 0.0.1
+Summary: An ML project to segment hotel customers using K-Means clustering.
+Author: Your Name
+Keywords: machine-learning,data-science,customer-segmentation
+Classifier: Development Status :: 3 - Alpha
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: numpy==1.26.4
+Requires-Dist: pandas==2.2.1
+Requires-Dist: scikit-learn==1.4.1.post1
+Requires-Dist: matplotlib==3.8.3
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: flake8; extra == "dev"
+
+# content for README.md

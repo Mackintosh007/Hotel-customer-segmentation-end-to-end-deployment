@@ -1,0 +1,38 @@
+# This file is used by modern Python packaging tools (like pip)
+# to build and distribute your project.
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hotel-customer-segmentation"
+version = "0.0.1"
+description = "An ML project to segment hotel customers using K-Means clustering."
+authors = [
+  { name = "Your Name" }
+]
+readme = "README.md"
+requires-python = ">=3.9" # Or your specific Python version
+keywords = ["machine-learning", "data-science", "customer-segmentation"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+# Define your project's dependencies here
+dependencies = [
+    "numpy==1.26.4",
+    "pandas==2.2.1",
+    "scikit-learn==1.4.1.post1",
+    "matplotlib==3.8.3"
+]
+
+# You can add optional dependencies for development, testing, etc.
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "flake8"
+]
