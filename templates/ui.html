@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KMeans Clustering Prediction</title>
+</head>
+<body>
+<h1>Predict Cluster</h1>
+<form id="predictionForm">
+  <label for="adults">Adults:</label>
+  <input type="number" id="adults" name="adults" min="0"><br><br>
+  
+  <label for="children">Children:</label>
+  <input type="number" id="children" name="children" min="0"><br><br>
+  
+  <label for="lead_time">Lead Time:</label>
+  <input type="number" id="lead_time" name="lead_time" min="0"><br><br>
+  
+  <label for="adr">Average Daily Rate (adr):</label>
+  <input type="number" id="adr" name="adr" step="0.01" min="0"><br><br>
+  
+  <label for="total_nights">Total Nights:</label>
+  <input type="number" id="total_nights" name="total_nights" min="0"><br><br>
+  
+  <label for="total_of_special_requests">Total Special Requests:</label>
+  <input type="number" id="total_of_special_requests" name="total_of_special_requests" min="0"><br><br>
+  
+  <button type="button" onclick="predictCluster()">Predict Cluster</button>
+</form>
+
+<h2 id="result"></h2>
+
+<script>
+function predictCluster() {
+  const data = {
+    adults: parseInt(document.getElementById('adults').value),
+    children: parseInt(document.getElementById('children').value),
+    lead_time: parseInt(document.getElementById('lead_time').value),
+    adr: parseFloat(document.getElementById('adr').value),
+    total_nights: parseInt(document.getElementById('total_nights').value),
+    total_of_special_requests: parseInt(document.getElementById('total_of_special_requests').value)
+  };
+
+  fetch('/predict', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(result => {
+    if (result.status === 'success') {
+      document.getElementById('result').innerText = 
+        'Assigned Cluster: ' + result.assigned_cluster;
+    } else {
+      document.getElementById('result').innerText = 
+        'Error: ' + result.message;
+    }
+  })
+  .catch(error => {
+    document.getElementById('result').innerText = 
+      'Error: ' + error;
+  });
+}
+</script>
+</body>
+</html>

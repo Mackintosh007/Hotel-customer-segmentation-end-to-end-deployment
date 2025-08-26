@@ -1,0 +1,3 @@
+[ 2025-08-26 21:07:45,438 ] 97 werkzeug - WARNING -  * Debugger is active!
+[ 2025-08-26 21:07:45,442 ] 97 werkzeug - INFO -  * Debugger PIN: 107-356-361
+[ 2025-08-26 21:08:17,400 ] 97 werkzeug - INFO - 127.0.0.1 - - [26/Aug/2025 21:08:17] "GET / HTTP/1.1" 200 -
