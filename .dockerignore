@@ -1,0 +1,41 @@
+Ignore common Python and IDE files to keep the image slim
+pycache/
+*.pyc
+*.pyo
+.env
+venv/
+.git/
+.vscode/
+.idea/
+.DS_Store
+
+eof
+
+### **Step-by-Step Instructions**
+
+1.  **Save the Files:** Create a new file named `Dockerfile` (with no extension) and copy the content from the first block into it. Then, create another new file named `.dockerignore` (again, no extension) in the same directory and copy the content from the second block.
+
+2.  **Organize Your Project:** Make sure your project directory looks like this. All new files should be in the main project folder.
+
+    ```
+    my_project_folder/
+    ├── app.py
+    ├── Dockerfile
+    ├── .dockerignore
+    ├── requirements.txt
+    └── templates/
+        └── index.html
+    ```
+
+3.  **Build the Docker Image:** Open your terminal, navigate to the `my_project_folder` directory, and run the following command. The `.` at the end tells Docker to use the current directory as the build context. The `-t` flag tags the image with a name you can easily reference.
+
+    ```bash
+    docker build -t hotel-customer-predictor .
+    ```
+
+    Docker will now follow the instructions in your `Dockerfile` to build an image. This may take a few minutes as it downloads the base image and installs the dependencies.
+
+4.  **Run the Docker Container:** Once the build is complete, you can run your application as a container using this command.
+
+    ```bash
+    docker run -p 5000:5000 hotel-customer-predictor
