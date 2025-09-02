@@ -7,10 +7,6 @@ from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.pipeline import Pipeline
 
-# Placeholder for custom modules to make the script runnable as a standalone file
-# In a real project, you would uncomment the following lines and import from your src directory.
-# from src.exception import CustomException
-# from src.logger import logging
 class CustomException(Exception):
     def __init__(self, message, sys):
         super().__init__(message)
