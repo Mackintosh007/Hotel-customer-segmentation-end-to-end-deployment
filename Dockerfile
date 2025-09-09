@@ -8,17 +8,14 @@ WORKDIR /app
 COPY requirements.txt requirements.txt
 
 # Install the Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Using `python -m pip` ensures packages are installed for this Python interpreter
+RUN python -m pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code into the container
 COPY . .
 
-# Copy the startup script and make it executable
-COPY start.sh .
-RUN chmod +x start.sh
-
 # Expose the port that the Flask application will run on
 EXPOSE 5000
 
-# Set the entrypoint to the startup script
-ENTRYPOINT ["./start.sh"]
+# Define the command to run the Flask application
+CMD ["python", "-m", "flask", "run", "--host=0.0.0.0"]
