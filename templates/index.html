@@ -1,152 +1,157 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Customer Segment Predictor</title>
-<script src="https://www.google.com/search?q=https://cdn.tailwindcss.com"></script>
-<style>
-@import url('https://www.google.com/search?q=https://fonts.googleapis.com/css2%3Ffamily%3DInter:wght%40400%3B600%3B700%26display%3Dswap');
-body {
-font-family: 'Inter', sans-serif;
-}
-input, select {
-@apply rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200;
-}
-label {
-@apply block text-sm font-medium text-gray-700;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Customer Segment Predictor</title>
+    <!-- Corrected CDN link for Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Corrected CDN link for Inter font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
-<div class="w-full max-w-4xl bg-white p-8 rounded-xl shadow-2xl">
-<h1 class="text-4xl font-extrabold text-center text-gray-800 mb-2 tracking-tight">
-Hotel Customer Segment Predictor
-</h1>
-<p class="text-center text-gray-500 mb-8 max-w-lg mx-auto">
-Enter customer booking details to predict which of the four segments they belong to.
-</p>
+    <div class="w-full max-w-4xl bg-white p-8 rounded-xl shadow-2xl">
+        <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-2 tracking-tight">
+            Hotel Customer Segment Predictor
+        </h1>
+        <p class="text-center text-gray-500 mb-8 max-w-lg mx-auto">
+            Enter customer booking details to predict which of the four segments they belong to.
+        </p>
 
-    <form id="prediction-form" class="space-y-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <label for="lead_time">Lead Time (days):</label>
-                <input type="number" id="lead_time" name="lead_time" value="0" class="mt-1 w-full" min="0" required>
+        <!-- Corrected form with classes applied directly to elements instead of using @apply -->
+        <form id="prediction-form" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="lead_time" class="block text-sm font-medium text-gray-700">Lead Time (days):</label>
+                    <input type="number" id="lead_time" name="lead_time" value="0" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" min="0" required>
+                </div>
+                <div>
+                    <label for="total_nights" class="block text-sm font-medium text-gray-700">Total Nights:</label>
+                    <input type="number" id="total_nights" name="total_nights" value="1" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" min="0" required>
+                </div>
             </div>
-            <div>
-                <label for="total_nights">Total Nights:</label>
-                <input type="number" id="total_nights" name="total_nights" value="1" class="mt-1 w-full" min="0" required>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div>
+                    <label for="adults" class="block text-sm font-medium text-gray-700">Adults:</label>
+                    <input type="number" id="adults" name="adults" value="1" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" min="0" required>
+                </div>
+                <div>
+                    <label for="children" class="block text-sm font-medium text-gray-700">Children:</label>
+                    <input type="number" id="children" name="children" value="0" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" min="0" required>
+                </div>
+                <div>
+                    <label for="babies" class="block text-sm font-medium text-gray-700">Babies:</label>
+                    <input type="number" id="babies" name="babies" value="0" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" min="0" required>
+                </div>
+                <div>
+                    <label for="booking_changes" class="block text-sm font-medium text-gray-700">Booking Changes:</label>
+                    <input type="number" id="booking_changes" name="booking_changes" value="0" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" min="0" required>
+                </div>
+                <div>
+                    <label for="adr" class="block text-sm font-medium text-gray-700">ADR (Avg. Daily Rate):</label>
+                    <input type="number" id="adr" name="adr" value="0" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" step="0.01" min="0" required>
+                </div>
+                <div>
+                    <label for="total_of_special_requests" class="block text-sm font-medium text-gray-700">Total Special Requests:</label>
+                    <input type="number" id="total_of_special_requests" name="total_of_special_requests" value="0" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200" min="0" required>
+                </div>
+                <div>
+                    <label for="is_canceled" class="block text-sm font-medium text-gray-700">Is Canceled:</label>
+                    <select id="is_canceled" name="is_canceled" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div>
-                <label for="adults">Adults:</label>
-                <input type="number" id="adults" name="adults" value="1" class="mt-1 w-full" min="0" required>
-            </div>
-            <div>
-                <label for="children">Children:</label>
-                <input type="number" id="children" name="children" value="0" class="mt-1 w-full" min="0" required>
-            </div>
-            <div>
-                <label for="babies">Babies:</label>
-                <input type="number" id="babies" name="babies" value="0" class="mt-1 w-full" min="0" required>
-            </div>
-            <div>
-                <label for="booking_changes">Booking Changes:</label>
-                <input type="number" id="booking_changes" name="booking_changes" value="0" class="mt-1 w-full" min="0" required>
-            </div>
-            <div>
-                <label for="adr">ADR (Avg. Daily Rate):</label>
-                <input type="number" id="adr" name="adr" value="0" class="mt-1 w-full" step="0.01" min="0" required>
-            </div>
-            <div>
-                <label for="total_of_special_requests">Total Special Requests:</label>
-                <input type="number" id="total_of_special_requests" name="total_of_special_requests" value="0" class="mt-1 w-full" min="0" required>
-            </div>
-            <div>
-                <label for="is_canceled">Is Canceled:</label>
-                <select id="is_canceled" name="is_canceled" class="mt-1 w-full">
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
-            </div>
-        </div>
-        
-        <div id="error-message" class="text-red-500 text-sm mt-2 hidden"></div>
+            
+            <div id="error-message" class="text-red-500 text-sm mt-2 hidden"></div>
 
-        <div class="mt-8 flex justify-center space-x-4">
-            <button type="submit" class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-700 transition-transform duration-200 transform hover:scale-105">
-                Predict Segment
-            </button>
-            <button type="reset" class="px-6 py-3 bg-gray-200 text-gray-700 font-semibold rounded-full shadow-lg hover:bg-gray-300 transition-transform duration-200 transform hover:scale-105">
-                Reset</button>
-        </div>
-    </form>
-
-    <div id="result-container" class="bg-white p-6 rounded-lg shadow-md mt-6 hidden">
-        <div class="flex items-center space-x-4 mb-4">
-            <div id="result-emoji" class="text-5xl"></div>
-            <div class="flex-1">
-                <h2 class="text-2xl font-semibold text-gray-800">Your Customer Group:</h2>
-                <p id="result-name" class="text-3xl font-bold text-indigo-600 mt-1"></p>
+            <div class="mt-8 flex justify-center space-x-4">
+                <button type="submit" class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-700 transition-transform duration-200 transform hover:scale-105">
+                    Predict Segment
+                </button>
+                <button type="reset" class="px-6 py-3 bg-gray-200 text-gray-700 font-semibold rounded-full shadow-lg hover:bg-gray-300 transition-transform duration-200 transform hover:scale-105">
+                    Reset
+                </button>
             </div>
+        </form>
+
+        <div id="result-container" class="bg-white p-6 rounded-lg shadow-md mt-6 hidden">
+            <div class="flex items-center space-x-4 mb-4">
+                <div id="result-emoji" class="text-5xl"></div>
+                <div class="flex-1">
+                    <h2 class="text-2xl font-semibold text-gray-800">Your Customer Group:</h2>
+                    <p id="result-name" class="text-3xl font-bold text-indigo-600 mt-1"></p>
+                </div>
+            </div>
+            <p id="result-summary" class="text-gray-600 leading-relaxed text-sm"></p>
         </div>
-        <p id="result-summary" class="text-gray-600 leading-relaxed text-sm"></p>
     </div>
-</div>
 
-<script>
-    document.getElementById('prediction-form').addEventListener('submit', async function(event) {
-        event.preventDefault();
-        const form = event.target;
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
+    <script>
+        document.getElementById('prediction-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
 
-        const errorMessage = document.getElementById('error-message');
-        const resultContainer = document.getElementById('result-container');
-
-        try {
-            errorMessage.classList.add('hidden');
-            
-            const response = await fetch('/predict', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
-            
-            // If the response is not OK, try to get a specific error message
-            if (!response.ok) {
-                try {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'Something went wrong with the prediction.');
-                } catch {
-                    // If parsing the JSON fails, show a generic error
-                    throw new Error('Server error: Could not get a specific error message. Is the server running?');
+            // Convert numerical string values to floats/integers as needed
+            for (const key in data) {
+                if (key !== 'is_canceled') {
+                    data[key] = parseFloat(data[key]);
+                } else {
+                    data[key] = parseInt(data[key]);
                 }
             }
 
-            const result = await response.json();
-            
-            document.getElementById('result-emoji').textContent = result.emoji;
-            document.getElementById('result-name').textContent = result.name;
-            document.getElementById('result-summary').textContent = result.summary;
-            resultContainer.classList.remove('hidden');
+            const errorMessage = document.getElementById('error-message');
+            const resultContainer = document.getElementById('result-container');
 
-        } catch (error) {
-            errorMessage.textContent = error.message;
-            errorMessage.classList.remove('hidden');
-            resultContainer.classList.add('hidden');
-        }
-    });
+            try {
+                // Hide any previous errors
+                errorMessage.classList.add('hidden');
+                
+                // Use a full URL to ensure the request is always sent correctly
+                const response = await fetch('http://localhost:8000/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+                
+                if (!response.ok) {
+                    try {
+                        const errorData = await response.json();
+                        throw new Error(errorData.detail || 'Something went wrong with the prediction.');
+                    } catch {
+                        throw new Error('Server error: Could not get a specific error message. Is the server running?');
+                    }
+                }
 
-    document.getElementById('prediction-form').addEventListener('reset', function() {
-        document.getElementById('result-container').classList.add('hidden');
-        document.getElementById('error-message').classList.add('hidden');
-    });
-</script>
+                const result = await response.json();
+                
+                document.getElementById('result-emoji').textContent = result.emoji;
+                document.getElementById('result-name').textContent = result.name;
+                document.getElementById('result-summary').textContent = result.summary;
+                resultContainer.classList.remove('hidden');
 
+            } catch (error) {
+                errorMessage.textContent = error.message;
+                errorMessage.classList.remove('hidden');
+                resultContainer.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('prediction-form').addEventListener('reset', function() {
+            document.getElementById('result-container').classList.add('hidden');
+            document.getElementById('error-message').classList.add('hidden');
+        });
+    </script>
 </body>
 </html>

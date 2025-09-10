@@ -1,86 +1,90 @@
-from flask import Flask, request, jsonify, render_template
-import numpy as np
-import pickle
-import os
+from fastapi import FastAPI
+from pydantic import BaseModel
+import random
 
-app = Flask(__name__)
+# Define the request body schema to match your HTML form
+class BookingData(BaseModel):
+    lead_time: float
+    total_nights: float
+    adults: float
+    children: float
+    babies: float
+    booking_changes: float
+    adr: float
+    total_of_special_requests: float
+    is_canceled: int
 
-# --- Simulating Model and Preprocessor Loading ---
-# In a real-world application, you would load your .pkl files like this:
-# with open('preprocessor.pkl', 'rb') as f:
-#     preprocessor = pickle.load(f)
-# with open('kmeans_model.pkl', 'rb') as f:
-#     kmeans_model = pickle.load(f)
+# Initialize the FastAPI application
+app = FastAPI(
+    title="Hotel Customer Segment Predictor",
+    description="An API to predict hotel customer segments based on booking data.",
+    version="1.0.0",
+)
 
-# Hardcoded data from the previous analysis to simulate the loaded files.
-# This ensures the code is runnable without the original .pkl files.
-SCALER_PARAMS = {
-    'mean': np.array([0.370321, 104.148107, 1.854944, 0.103091, 0.005085, 0.221516, 101.996135, 0.570146, 3.424419]),
-    'scale': np.array([0.482937, 106.879737, 0.575608, 0.398696, 0.072230, 0.651765, 47.973302, 0.793854, 2.404287])
+# Define the customer segments with their details and emojis
+CUSTOMER_SEGMENTS = {
+    "Leisure Travelers": {
+        "emoji": "✈️",
+        "summary": "This segment is characterized by bookings with a short lead time and a high total number of special requests, indicating spontaneous travel plans. They often book for shorter stays and may be families or couples.",
+        "thresholds": lambda data: data.lead_time < 30 and data.total_of_special_requests > 1
+    },
+    "Corporate & Business": {
+        "emoji": "💼",
+        "summary": "This segment typically has a high booking changes count and a short stay duration, often booking for a single person. They value flexibility and are not always the ones making the booking.",
+        "thresholds": lambda data: data.booking_changes >= 1 and data.total_nights < 5 and data.adults == 1
+    },
+    "High-Value Guests": {
+        "emoji": "💎",
+        "summary": "High-value guests have a high ADR (Average Daily Rate) and typically book with a high lead time, which suggests they are planning a significant event or vacation. They also tend to have a low cancellation rate.",
+        "thresholds": lambda data: data.adr > 150 and data.lead_time > 60 and data.is_canceled == 0
+    },
+    "Family Stay": {
+        "emoji": "👨‍👩‍👧‍👦",
+        "summary": "This segment includes guests traveling with children or babies. They often book for longer stays and tend to have a moderate lead time to plan their vacation.",
+        "thresholds": lambda data: (data.children > 0 or data.babies > 0) and data.total_nights >= 5
+    },
+    "Other": {
+        "emoji": "👤",
+        "summary": "This is the default segment for bookings that do not fit into any of the predefined categories. It represents a diverse group of customers with varied booking patterns.",
+        "thresholds": lambda data: True
+    }
 }
 
-# Cluster centers representing the four segments
-CLUSTER_CENTERS = np.array([
-    [0.162410, 73.774288, 1.838520, 0.126588, 0.008453, 0.137837, 86.914285, 0.673886, 3.469428],
-    [0.238496, 75.092213, 1.860601, 0.134882, 0.009491, 0.155380, 96.115201, 0.727441, 3.567476],
-    [0.182713, 77.617068, 2.113063, 0.222277, 0.009943, 0.211475, 121.285810, 1.531729, 4.158643],
-    [0.926578, 206.007654, 1.944299, 0.040187, 0.000371, 0.015242, 78.490892, 0.082599, 3.064170]
-])
+def predict_segment(data: BookingData) -> dict:
+    """
+    Predicts the customer segment based on simple, predefined rules.
+    In a real-world application, this is where your trained ML model would be called.
+    """
+    # Check the data against the predefined rules
+    for segment_name, segment_details in CUSTOMER_SEGMENTS.items():
+        if segment_details["thresholds"](data):
+            return {
+                "name": segment_name,
+                "emoji": segment_details["emoji"],
+                "summary": segment_details["summary"],
+            }
+    
+    # Fallback to a default segment if no rules are met
+    return {
+        "name": "Other",
+        "emoji": CUSTOMER_SEGMENTS["Other"]["emoji"],
+        "summary": CUSTOMER_SEGMENTS["Other"]["summary"],
+    }
 
-CLUSTER_DESCRIPTIONS = [
-    {"name": "The Dependable Planners", "summary": "Organized, low-risk, and have solid plans.", "emoji": "🗓️"},
-    {"name": "The Flexible Online Shoppers", "summary": "Price-sensitive and more likely to cancel.", "emoji": "🛒"},
-    {"name": "The Family Vacationers", "summary": "Book for longer stays and require more amenities.", "emoji": "👨‍👩‍👧‍👦"},
-    {"name": "The High-Risk Group Bookers", "summary": "Large group bookings with very high cancellation rates.", "emoji": "⚠️"}
-]
-
-# Root route to serve the HTML page
-@app.route('/')
+@app.get("/")
 def home():
-    return render_template('index.html')
+    """Simple homepage for the API."""
+    return {"message": "The Hotel Customer Segment API is running! Use the /predict endpoint to make a prediction."}
 
-# API endpoint to handle the prediction
-@app.route('/predict', methods=['POST'])
-def predict():
+@app.post("/predict")
+async def predict(request_data: BookingData):
+    """
+    Accepts customer booking details and returns a predicted segment.
+    """
     try:
-        # Get the JSON data from the request
-        data = request.get_json(force=True)
-        
-        # Prepare the input data as a NumPy array
-        # Ensure the order of features matches the model's training data
-        features = [
-            int(data['is_canceled']),
-            float(data['lead_time']),
-            float(data['adults']),
-            float(data['children']),
-            float(data['babies']),
-            float(data['booking_changes']),
-            float(data['adr']),
-            float(data['total_of_special_requests']),
-            float(data['total_nights']),
-        ]
-        
-        input_array = np.array(features).reshape(1, -1)
-        
-        # Scale the input data using the hardcoded scaler parameters
-        scaled_input = (input_array - SCALER_PARAMS['mean']) / SCALER_PARAMS['scale']
-        
-        # Find the closest cluster center using Euclidean distance
-        distances = np.linalg.norm(scaled_input - CLUSTER_CENTERS, axis=1)
-        cluster_id = np.argmin(distances)
-
-        # Get the description for the predicted cluster
-        predicted_cluster_info = CLUSTER_DESCRIPTIONS[cluster_id]
-
-        # Return the prediction as a JSON response
-        return jsonify(predicted_cluster_info)
-
+        prediction_result = predict_segment(request_data)
+        return prediction_result
+    
     except Exception as e:
-        # Log the error and return an error message
-        app.logger.error(f"Error during prediction: {e}")
-        return jsonify({"error": "An error occurred during prediction. Please check your input."}), 400
-
-if __name__ == '__main__':
-    # You can run this app from the command line using 'python app.py'
-    # Use debug=True for development, turn off for production
-    app.run(debug=True)
+        # Return a custom error message
+        return {"error": f"An error occurred during prediction: {str(e)}"}

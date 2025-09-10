@@ -5,11 +5,8 @@ import numpy as np
 import pickle
 
 def main():
-    """
-    Main function to run the cluster interpretation pipeline.
-    """
     
-    # This line is to confirm the script is running. You should see this message.
+    
     print("--- Script execution has started. ---")
     
     # A simple function to load a pickled object from a file
@@ -28,11 +25,9 @@ def main():
             return None
 
     try:
-        # --- Step 1: Define File Paths in the same directory as the script ---
-        # Get the directory of the current script
+        
         script_dir = os.path.dirname(os.path.abspath(__file__))
         
-        # Assume all files are in the same folder as the script
         DATA_PATH = os.path.join(script_dir, "hotel_booking.csv")
         PREPROCESSOR_PATH = os.path.join(script_dir, "preprocessor.pkl")
         MODEL_PATH = os.path.join(script_dir, "kmeans_model.pkl")
@@ -40,7 +35,6 @@ def main():
         print("Starting cluster interpretation pipeline...")
         print(f"Attempting to load data from: {DATA_PATH}")
 
-        # --- Step 2: Load Data and Artifacts ---
         print("Loading raw data, preprocessor, and trained model...")
         df = pd.read_csv(DATA_PATH)
         preprocessor = load_object(PREPROCESSOR_PATH)
@@ -52,10 +46,8 @@ def main():
             
         print("Files loaded successfully.")
 
-        # --- Step 3: Data Preparation (as in Data Transformation script) ---
         print("Applying data cleaning and feature engineering...")
         
-        # Drop irrelevant columns as done in the data_transformation.py file
         cols_to_drop = [
             'name', 'email', 'phone-number', 'credit_card', 
             'reservation_status', 'reservation_status_date',
@@ -85,7 +77,6 @@ def main():
         
         print("Cluster labels have been added to the DataFrame.")
 
-        # --- Step 5: Interpret the Clusters ---
         print("\n--- Analyzing Customer Segments ---")
         
         # Get the list of numerical columns for analysis

@@ -20,7 +20,9 @@ class logging:
         print(f"[ERROR] {message}", file=sys.stderr)
         
 def load_object(file_path):
-    
+    """
+    Loads a Python object from a file using pickle.
+    """
     try:
         with open(file_path, "rb") as file_obj:
             return pickle.load(file_obj)
@@ -33,9 +35,12 @@ class PredictPipeline:
     def __init__(self):
         
         try:
-            # Load artifacts from the 'artifacts' directory
-            preprocessor_path = os.path.join('artifacts', 'preprocessor.pkl')
-            model_path = os.path.join('artifacts', 'kmeans_model.pkl')
+            # Use a path relative to the current file to locate the artifacts directory
+            current_dir = os.path.dirname(__file__)
+            artifacts_dir = os.path.join(current_dir, '..', 'components', 'artifacts')
+            
+            preprocessor_path = os.path.join(artifacts_dir, 'preprocessor.pkl')
+            model_path = os.path.join(artifacts_dir, 'kmeans_model.pkl')
             
             self.preprocessor = load_object(preprocessor_path)
             self.kmeans_model = load_object(model_path)
@@ -56,7 +61,6 @@ class PredictPipeline:
         try:
             logging.info("Starting prediction process.")
 
-            # Step 1: Data Cleaning and Feature Engineering (same as in data_transformation.py)
             features_df = features_df.drop(columns=self.cols_to_drop)
             features_df = features_df[(features_df['adults'] > 0) | (features_df['children'] > 0) | (features_df['babies'] > 0)]
             features_df['adr'] = features_df['adr'].replace(0, features_df['adr'].mean())
@@ -64,15 +68,12 @@ class PredictPipeline:
             features_df['total_nights'] = features_df['stays_in_weekend_nights'] + features_df['stays_in_week_nights']
             features_df = features_df.drop(columns=['stays_in_weekend_nights', 'stays_in_week_nights'])
 
-            # Step 2: Transform the data using the loaded preprocessor
             logging.info("Applying preprocessor on the new data.")
             transformed_data = self.preprocessor.transform(features_df)
 
-            # Step 3: Predict clusters using the loaded model
             logging.info("Predicting clusters.")
             clusters = self.kmeans_model.predict(transformed_data)
 
-            # Step 4: Add clusters to the DataFrame and return
             features_df['cluster'] = clusters
             logging.info("Prediction complete.")
             return features_df
@@ -96,7 +97,7 @@ if __name__ == "__main__":
         segmented_df = predictor.predict(raw_df)
 
         # Save the final segmented DataFrame to a CSV file
-        segmented_data_path = os.path.join('artifacts', 'segmented_customers.csv')
+        segmented_data_path = os.path.join(os.path.dirname(__file__), '..', 'components', 'artifacts', 'segmented_customers.csv')
         segmented_df.to_csv(segmented_data_path, index=False)
         
         logging.info(f"Prediction pipeline executed successfully. Segmented data saved at: {segmented_data_path}")
