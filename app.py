@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 import random
 
 # Define the request body schema to match your HTML form
@@ -19,6 +20,15 @@ app = FastAPI(
     title="Hotel Customer Segment Predictor",
     description="An API to predict hotel customer segments based on booking data.",
     version="1.0.0",
+)
+
+# Add CORS middleware to allow requests from the HTML file
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allows all headers
 )
 
 # Define the customer segments with their details and emojis
