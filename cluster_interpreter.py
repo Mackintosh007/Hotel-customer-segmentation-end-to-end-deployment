@@ -11,9 +11,7 @@ def main():
     
     # A simple function to load a pickled object from a file
     def load_object(file_path):
-        """
-        Loads a Python object from a file using pickle.
-        """
+        
         try:
             with open(file_path, "rb") as file_obj:
                 return pickle.load(file_obj)
